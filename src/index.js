@@ -1,17 +1,12 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react"
+import ReactDOM from "react-dom"
+import App from "./App"
+import 'regenerator-runtime/runtime'
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+const widgetDiv = document.querySelectorAll(".rick_and_morty")
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+console.log(widgetDiv)
+
+widgetDiv.forEach(div => {
+    ReactDOM.render(<App />, div)
+})
