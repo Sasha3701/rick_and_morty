@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { iconTriangle } from '../images'
-import 'regenerator-runtime/runtime'
 
 const Container = styled.div`
   position: relative;
