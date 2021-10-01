@@ -8,9 +8,14 @@ class Api {
   }
 
   getAll = async () => {
-      const res = await this.axios.get("/character")
+      const res = await this.axios.get(`/character/?name=&status=alive&species=&type=&gender=male`)
       return res.data
   }
+
+  getCharacterByFilter = async ({ name, status, species, type, gender }) => {
+    const res = await this.axios.get(`/character/?name=${name}&status=${status}&species=${species}&type=${type}&gender=${gender}`)
+    return res.data
+}
 
 }
 
