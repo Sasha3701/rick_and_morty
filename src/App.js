@@ -7,6 +7,7 @@ import Characters from "./components/Characters";
 import FilterBlock from "./components/FilterBlock";
 import Pagination from "./components/Pagination";
 import WidgetContainer from "./components/WidgetContainer";
+import CardCharacter from "./components/CardCharacter";
 
 // Api
 import api from "./api";
@@ -17,6 +18,8 @@ import { save as savePag } from "./store/paginationSlice";
 
 const App = ({ domElemet }) => {
   const [show, setShow] = useState(false);
+  const [card, setCard] = useState(false)
+  const [cardId, setCardId] = useState(null)
   const characters = useSelector((state) => state.characters.value);
   const { pages } = useSelector((state) => state.pagination);
   const dispatch = useDispatch();
@@ -34,11 +37,22 @@ const App = ({ domElemet }) => {
     setShow((prevState) => !prevState);
   };
 
+  const handleOpenCard = id => {
+    setCardId(id)
+    setCard(true)
+  }
+
+  const handleCloseCard = () => {
+    setCardId(null)
+    setCard(false)
+  }
+
   return (
     <WidgetContainer show={show} open={variantOpen} handleOpenClose={handleOpenClose}>
       <FilterBlock />
-      <Characters characters={characters} />
+      <Characters onOpenChar={handleOpenCard} characters={characters} />
       {pages > 1 ? <Pagination /> : null}
+      {card ? <CardCharacter onClose={handleCloseCard} id={cardId}/> : null}
     </WidgetContainer>
   );
 };

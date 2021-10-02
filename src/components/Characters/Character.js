@@ -19,6 +19,7 @@ const CharacterItem = styled.div`
   box-sizing: border-box;
   width: 250px;
   animation: ${animItem} 2s ease;
+  cursor: pointer;
 `;
 const Name = styled.p`
   margin: 0;
@@ -33,11 +34,11 @@ const Avatar = styled.img`
   border-radius: 8px 0px 0px 8px;
 `;
 
-const Character = ({ character }) => {
-  const { name, image } = character;
+const Character = ({ character, onOpenChar }) => {
+  const { name, image, id } = character;
 
   return (
-    <CharacterItem>
+    <CharacterItem onClick={() => onOpenChar(id)}>
       <Avatar src={image} alt="avatar" />
       <Name>{name}</Name>
     </CharacterItem>

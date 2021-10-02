@@ -21,13 +21,13 @@ const Item = styled.li`
   padding: 0;
 `;
 
-const ListCharacters = ({ characters }) => {
+const ListCharacters = ({ characters, onOpenChar }) => {
 
   return (
     <List>
       {characters.map((character) => (
         <Item key={character.id}>
-          <Character character={character} />
+          <Character onOpenChar={onOpenChar} character={character} />
         </Item>
       ))}
     </List>

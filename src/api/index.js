@@ -22,6 +22,11 @@ class Api {
     const res = await this.axios.get(`/character${params}`);
     return res.data;
   }
+
+  getCharacter = async(id) => {
+    const res = await this.axios.get(`/character/${id}`);
+    return res.data;
+  }
 }
 
 const api = new Api("https://rickandmortyapi.com/api");
