@@ -19,6 +19,7 @@ const Content = styled.div`
   align-items: center;
   position: relative;
   animation: ${animContent} 1s ease-in-out;
+
 `;
 const ToggleButton = styled.button`
   background-color: transparent;
@@ -51,18 +52,18 @@ const Container = styled.div`
   position: absolute;
   ${({ open }) => {
     switch (open) {
-      case "bottom-left":
-        return "top: 55px; left: 0px;";
       case "bottom-right":
+        return "top: 55px; left: 0px;";
+      case "bottom-left":
         return "top: 55px; right: 0px;";
-      case "top-left":
-        return "bottom: 55px; left: 0px;";
       case "top-right":
+        return "bottom: 55px; left: 0px;";
+      case "top-left":
         return "bottom: 55px; right: 0px;";
       default :
         return "top: 55px; left: 0px;";
     }
-  }}
+  }};
 `;
 
 const Wrapper = styled.div`
