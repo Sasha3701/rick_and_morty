@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const SytledButton = styled.button`
+const StyledButton = styled.button`
   margin: 0;
   padding: 5px 10px;
   border: none;
@@ -24,11 +24,41 @@ const SytledButton = styled.button`
   }
 `;
 
+const StyledButtonLink = styled.button`
+  margin: 0;
+  padding: 5px;
+  border: none;
+  box-sizing: border-box;
+  font-size: ${({ active }) => active ? "24px" : "16px"};
+  font-weight: ${({ active }) => active ? "900" : "400"};
+  background-color: transparent;
+  color: black;
+  cursor: pointer;
+  &:hover {
+    color: rgb(59, 255, 109);
+  }
+  &:focus {
+    outline: none;
+    color: rgb(59, 255, 109);
+  }
+  &:disabled {
+    color: gray;
+    cursor: not-allowed;
+  }
+`;
+
 const Button = ({ children, theme = "default", type = "button", ...props }) => {
+  if (theme === "button-link") {
+    return (
+      <StyledButtonLink type={type} {...props}>
+        {children}
+      </StyledButtonLink>
+    );
+  }
   return (
-    <SytledButton type={type} theme={theme} {...props}>
+    <StyledButton type={type} {...props}>
       {children}
-    </SytledButton>
+    </StyledButton>
   );
 };
 

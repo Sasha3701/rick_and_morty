@@ -14,6 +14,7 @@ import api from "../../api";
 
 // Actions
 import { save } from "../../store/charactersSlice";
+import { save as savePag, addQueryString } from "../../store/paginationSlice";
 
 const inputs = [
   {
@@ -145,8 +146,10 @@ const FilterBlock = () => {
     const isEqual = comparisonParams(lastParams, data)
     if(isEqual) {
       const queryString = createQueryString(data)
-      const { results } = await api.getCharacterByFilter(queryString)
+      const { info, results } = await api.getCharacterByFilter(queryString)
       dispatch(save(results))
+      dispatch(savePag(info))
+      dispatch(addQueryString(queryString))
       setLastParams(data)
     }
   }
@@ -162,8 +165,10 @@ const FilterBlock = () => {
     }
     const isAllEmpty = Object.values(lastParams).every( item => item === "")
     if(!isAllEmpty) {
-      const { results } = await api.getAll()
+      const { info, results } = await api.getAll()
       dispatch(save(results))
+      dispatch(savePag(info))
+      dispatch(addQueryString(""))
       setLastParams({ name: "", species: "", type: "", status: "", gender: "" })
     }
   }
