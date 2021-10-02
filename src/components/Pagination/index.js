@@ -23,6 +23,9 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 5px;
+  padding: 0;
+  width: 100%;
 `;
 
 const Img = styled.img`

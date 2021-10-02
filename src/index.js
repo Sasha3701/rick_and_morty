@@ -6,12 +6,11 @@ import { Provider } from "react-redux";
 
 const widgetDiv = document.querySelectorAll(".rick_and_morty");
 
-const app = (
-  <Provider store={store}>
-    <App />
-  </Provider>
-);
-
 widgetDiv.forEach((div) => {
-  ReactDOM.render(app, div);
+  ReactDOM.render(
+    <Provider store={store}>
+      <App domElemet={div}/>
+    </Provider>,
+    div
+  );
 });

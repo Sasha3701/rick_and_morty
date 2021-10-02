@@ -62,7 +62,7 @@ const selects = [
         id: 3,
         label: "-",
         value: "",
-      }
+      },
     ],
   },
   {
@@ -94,16 +94,18 @@ const selects = [
         id: 4,
         label: "-",
         value: "",
-      }
+      },
     ],
   },
 ];
 
 const Container = styled.div`
-  display: inline-block;
   background-color: rgb(59, 255, 109);
   height: 100px;
   padding: 5px;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 8px 8px 0px 0px;
 `;
 
 const Inputs = styled.div`
@@ -122,70 +124,112 @@ const SelectsAndButton = styled.div`
   margin: 5px;
 `;
 
-const FilterBlock = () => {
+const GroupButtons = styled.ul`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0px 30px;
+  padding: 0;
+  list-style: none;
+`;
+const WrapperButton = styled.li`
+  margin: 0px 10px;
+  padding: 0;
+`;
 
-  const [search, setSearch] = useState({ name: "", species: "", type: "" })
-  const [select, setSelect] = useState({ status: "", gender: "" })
-  const [lastParams, setLastParams] = useState({ name: "", species: "", type: "", status: "", gender: "" })
-  const dispatch = useDispatch()
+const FilterBlock = () => {
+  const [search, setSearch] = useState({ name: "", species: "", type: "" });
+  const [select, setSelect] = useState({ status: "", gender: "" });
+  const [lastParams, setLastParams] = useState({
+    name: "",
+    species: "",
+    type: "",
+    status: "",
+    gender: "",
+  });
+  const dispatch = useDispatch();
 
   const handleChangeInputs = (e) => {
-    const name = e.target.name
-    const value = e.target.value
-    setSearch(prevState => ({...prevState, [name]: value}))
-  }
+    const name = e.target.name;
+    const value = e.target.value;
+    setSearch((prevState) => ({ ...prevState, [name]: value }));
+  };
 
   const handleChangeSelects = (e) => {
-    const name = e.target.name
-    const value = e.target.value
-    setSelect(prevState => ({...prevState, [name]: value}))
-  }
+    const name = e.target.name;
+    const value = e.target.value;
+    setSelect((prevState) => ({ ...prevState, [name]: value }));
+  };
 
   const handleFilterParams = async () => {
-    const data = { ...search, ...select }
-    const isEqual = comparisonParams(lastParams, data)
-    if(isEqual) {
-      const queryString = createQueryString(data)
-      const { info, results } = await api.getCharacterByFilter(queryString)
-      dispatch(save(results))
-      dispatch(savePag(info))
-      dispatch(addQueryString(queryString))
-      setLastParams(data)
+    const data = { ...search, ...select };
+    const isEqual = comparisonParams(lastParams, data);
+    if (isEqual) {
+      const queryString = createQueryString(data);
+      const { info, results } = await api.getCharacterByFilter(queryString);
+      dispatch(save(results));
+      dispatch(savePag(info));
+      dispatch(addQueryString(queryString));
+      setLastParams(data);
     }
-  }
+  };
 
   const handleClearFilterParams = async () => {
-    const { name, type, species } = search
-    const { status, gender } = select
-    if(name !== "" || species !== "" || type !== "") {
-      setSearch({ name: "", species: "", type: "" })
+    const { name, type, species } = search;
+    const { status, gender } = select;
+    if (name !== "" || species !== "" || type !== "") {
+      setSearch({ name: "", species: "", type: "" });
     }
-    if(status !== "" || gender !== "") {
-      setSelect({ status: "", gender: "" })
+    if (status !== "" || gender !== "") {
+      setSelect({ status: "", gender: "" });
     }
-    const isAllEmpty = Object.values(lastParams).every( item => item === "")
-    if(!isAllEmpty) {
-      const { info, results } = await api.getAll()
-      dispatch(save(results))
-      dispatch(savePag(info))
-      dispatch(addQueryString(""))
-      setLastParams({ name: "", species: "", type: "", status: "", gender: "" })
+    const isAllEmpty = Object.values(lastParams).every((item) => item === "");
+    if (!isAllEmpty) {
+      const { info, results } = await api.getAll();
+      dispatch(save(results));
+      dispatch(savePag(info));
+      dispatch(addQueryString(""));
+      setLastParams({
+        name: "",
+        species: "",
+        type: "",
+        status: "",
+        gender: "",
+      });
     }
-  }
+  };
 
   return (
     <Container>
       <Inputs>
         {inputs.map(({ id, name, ...rest }) => (
-          <Input key={id} value={search[name]} name={name} onChange={e => handleChangeInputs(e)} {...rest} />
+          <Input
+            key={id}
+            value={search[name]}
+            name={name}
+            onChange={(e) => handleChangeInputs(e)}
+            {...rest}
+          />
         ))}
       </Inputs>
       <SelectsAndButton>
         {selects.map(({ id, name, ...rest }) => (
-          <Select key={id} value={select[name]} name={name} onChange={e => handleChangeSelects(e)} {...rest} />
+          <Select
+            key={id}
+            value={select[name]}
+            name={name}
+            onChange={(e) => handleChangeSelects(e)}
+            {...rest}
+          />
         ))}
-        <Button onClick={handleFilterParams}>Show</Button>
-        <Button onClick={handleClearFilterParams}>Clear</Button>
+        <GroupButtons>
+          <WrapperButton>
+            <Button onClick={handleFilterParams}>Show</Button>
+          </WrapperButton>
+          <WrapperButton>
+            <Button onClick={handleClearFilterParams}>Clear</Button>
+          </WrapperButton>
+        </GroupButtons>
       </SelectsAndButton>
     </Container>
   );

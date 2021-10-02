@@ -6,6 +6,7 @@ import "regenerator-runtime/runtime";
 import Characters from "./components/Characters";
 import FilterBlock from "./components/FilterBlock";
 import Pagination from "./components/Pagination";
+import WidgetContainer from "./components/WidgetContainer";
 
 // Api
 import api from "./api";
@@ -14,13 +15,15 @@ import api from "./api";
 import { save } from "./store/charactersSlice";
 import { save as savePag } from "./store/paginationSlice";
 
-const App = () => {
+const App = ({ domElemet }) => {
   const [show, setShow] = useState(false);
   const characters = useSelector((state) => state.characters.value);
   const { pages } = useSelector((state) => state.pagination);
   const dispatch = useDispatch();
 
-  const handleOpen = () => {
+  const variantOpen = domElemet.getAttribute("data-open")
+
+  const handleOpenClose = () => {
     if (characters.length === 0) {
       api.getAll().then((res) => {
         const { results, info } = res;
@@ -31,18 +34,12 @@ const App = () => {
     setShow((prevState) => !prevState);
   };
 
-  // return <WidgetContainer position="top" show={show} handleOpenClose={handleOpenClose}>{show ? "asdas" : null}</WidgetContainer>
   return (
-    <>
-      {show ? (
-        <>
-          <FilterBlock />
-          <Characters characters={characters} />
-          {pages > 1 ? <Pagination /> : null}
-        </>
-      ) : null}
-      <button onClick={handleOpen}>Fetch</button>
-    </>
+    <WidgetContainer show={show} open={variantOpen} handleOpenClose={handleOpenClose}>
+      <FilterBlock />
+      <Characters characters={characters} />
+      {pages > 1 ? <Pagination /> : null}
+    </WidgetContainer>
   );
 };
 

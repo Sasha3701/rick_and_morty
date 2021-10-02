@@ -8,7 +8,7 @@ const StyledInput = styled.input`
   box-sizing: border-box;
   box-shadow: 1px 1px 10px 2px lightgray;
   border-radius: 8px;
-  width: 150px;
+  width: 100%;
   font-size: 14px;
   &:focus {
     outline: none;
@@ -24,6 +24,7 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   margin: 5px;
+  flex: 1;
 `;
 
 const Input = ({ label, name, ...props }) => {

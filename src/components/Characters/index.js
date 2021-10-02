@@ -8,10 +8,11 @@ const List = styled.ul`
   list-style: none;
   display: flex;
   flex-direction: column;
+  align-items: center;
   flex-wrap: wrap;
-  width: 525px;
-  height: 650px;
-  margin: 0;
+  width: 100%;
+  height: 440px;
+  margin: 10px 0px 0px 0;
   padding: 0;
 `;
 

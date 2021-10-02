@@ -6,6 +6,7 @@ const StyledSelect = styled.select`
   border: none;
   padding: 5px;
   border-radius: 8px;
+  width: 100%;
   box-shadow: 1px 1px 10px 2px lightgray;
   &:focus {
     outline: none;
@@ -25,6 +26,7 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   margin: 5px;
+  flex: 1;
 `;
 
 const Select = ({ name, options, label, ...props }) => {

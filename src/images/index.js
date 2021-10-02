@@ -1,9 +1,6 @@
-import iconTriangle from "./triangle.svg"
-import iconPrev from "./left-arrow.svg"
-import iconNext from "./right-arrow.svg"
+import iconPrev from "./left-arrow.svg";
+import iconNext from "./right-arrow.svg";
+import iconOpen from "./open.svg";
+import iconClose from "./close.svg";
 
-export {
-    iconTriangle,
-    iconPrev,
-    iconNext
-}
+export { iconPrev, iconNext, iconOpen, iconClose };
