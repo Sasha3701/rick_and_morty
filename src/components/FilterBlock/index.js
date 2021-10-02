@@ -15,6 +15,7 @@ import api from "../../api";
 // Actions
 import { save } from "../../store/charactersSlice";
 import { save as savePag, addQueryString } from "../../store/paginationSlice";
+import { ErrorSearch } from "../ErrorComponents";
 
 const inputs = [
   {
@@ -138,6 +139,8 @@ const WrapperButton = styled.li`
 `;
 
 const FilterBlock = () => {
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [search, setSearch] = useState({ name: "", species: "", type: "" });
   const [select, setSelect] = useState({ status: "", gender: "" });
   const [lastParams, setLastParams] = useState({
@@ -161,16 +164,33 @@ const FilterBlock = () => {
     setSelect((prevState) => ({ ...prevState, [name]: value }));
   };
 
+  const handleCloseError = () => {
+    setError(false);
+    setErrorMessage("");
+  };
+
   const handleFilterParams = async () => {
     const data = { ...search, ...select };
     const isEqual = comparisonParams(lastParams, data);
     if (isEqual) {
       const queryString = createQueryString(data);
-      const { info, results } = await api.getCharacterByFilter(queryString);
-      dispatch(save(results));
-      dispatch(savePag(info));
-      dispatch(addQueryString(queryString));
-      setLastParams(data);
+      api
+        .getCharacterByFilter(queryString)
+        .then((res) => {
+          const { info, results } = res;
+          dispatch(save(results));
+          dispatch(savePag(info));
+          dispatch(addQueryString(queryString));
+          setLastParams(data);
+        })
+        .catch((e) => {
+          if (e?.response?.data?.error) {
+            setErrorMessage(e.response.data.error);
+          } else {
+            setErrorMessage(e.message);
+          }
+          setError(true);
+        });
     }
   };
 
@@ -185,53 +205,63 @@ const FilterBlock = () => {
     }
     const isAllEmpty = Object.values(lastParams).every((item) => item === "");
     if (!isAllEmpty) {
-      const { info, results } = await api.getAll();
-      dispatch(save(results));
-      dispatch(savePag(info));
-      dispatch(addQueryString(""));
-      setLastParams({
-        name: "",
-        species: "",
-        type: "",
-        status: "",
-        gender: "",
-      });
+      api.getAll().then((res) => {
+        const { info, results } = res;
+        dispatch(save(results));
+        dispatch(savePag(info));
+        dispatch(addQueryString(""));
+        setLastParams({
+          name: "",
+          species: "",
+          type: "",
+          status: "",
+          gender: "",
+        });
+      }).catch(e => {
+        setErrorMessage(e.message);
+        setError(true);
+      })
     }
   };
 
   return (
-    <Container>
-      <Inputs>
-        {inputs.map(({ id, name, ...rest }) => (
-          <Input
-            key={id}
-            value={search[name]}
-            name={name}
-            onChange={(e) => handleChangeInputs(e)}
-            {...rest}
-          />
-        ))}
-      </Inputs>
-      <SelectsAndButton>
-        {selects.map(({ id, name, ...rest }) => (
-          <Select
-            key={id}
-            value={select[name]}
-            name={name}
-            onChange={(e) => handleChangeSelects(e)}
-            {...rest}
-          />
-        ))}
-        <GroupButtons>
-          <WrapperButton>
-            <Button onClick={handleFilterParams}>Show</Button>
-          </WrapperButton>
-          <WrapperButton>
-            <Button onClick={handleClearFilterParams}>Clear</Button>
-          </WrapperButton>
-        </GroupButtons>
-      </SelectsAndButton>
-    </Container>
+    <>
+      <Container>
+        <Inputs>
+          {inputs.map(({ id, name, ...rest }) => (
+            <Input
+              key={id}
+              value={search[name]}
+              name={name}
+              onChange={(e) => handleChangeInputs(e)}
+              {...rest}
+            />
+          ))}
+        </Inputs>
+        <SelectsAndButton>
+          {selects.map(({ id, name, ...rest }) => (
+            <Select
+              key={id}
+              value={select[name]}
+              name={name}
+              onChange={(e) => handleChangeSelects(e)}
+              {...rest}
+            />
+          ))}
+          <GroupButtons>
+            <WrapperButton>
+              <Button onClick={handleFilterParams}>Show</Button>
+            </WrapperButton>
+            <WrapperButton>
+              <Button onClick={handleClearFilterParams}>Clear</Button>
+            </WrapperButton>
+          </GroupButtons>
+        </SelectsAndButton>
+      </Container>
+      {error ? (
+        <ErrorSearch text={errorMessage} onClose={handleCloseError} />
+      ) : null}
+    </>
   );
 };
 
