@@ -14,7 +14,7 @@ export const createQueryString = (params) => {
     result += `name=${type}&`;
   }
   if (status) {
-    result += `species=${status}&`;
+    result += `status=${status}&`;
   }
   if (gender) {
     result += `gender=${gender}&`;
